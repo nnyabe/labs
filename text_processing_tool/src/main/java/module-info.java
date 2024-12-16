@@ -13,4 +13,12 @@ module com.text.text_processing_tool {
 
     opens com.text.text_processing_tool to javafx.fxml;
     exports com.text.text_processing_tool;
+    exports com.text.text_processing_tool.utils;
+    opens com.text.text_processing_tool.utils to javafx.fxml;
+    exports com.text.text_processing_tool.service;
+    opens com.text.text_processing_tool.service to javafx.fxml;
+    exports com.text.text_processing_tool.models;
+    opens com.text.text_processing_tool.models to javafx.fxml;
+    exports com.text.text_processing_tool.views to javafx.fmxl;
+    opens com.text.text_processing_tool.views to javafx.fxml;
 }

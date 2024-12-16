@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="905.0" prefWidth="1242.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-<!--            fx:controller="com.text.text_processing_tool.views.LandingView">-->
+<AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="866.0" prefWidth="1402.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.text.text_processing_tool.views.LandingView">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1212.0">
          <children>
@@ -17,7 +18,7 @@
                </font>
             </Label>
          </children></HBox>
-      <VBox alignment="CENTER" layoutX="137.0" layoutY="114.0" prefHeight="632.0" prefWidth="574.0" AnchorPane.leftAnchor="80.0">
+      <VBox alignment="CENTER" layoutX="77.0" layoutY="114.0" prefHeight="632.0" prefWidth="528.0" AnchorPane.leftAnchor="77.0">
          <children>
             <VBox alignment="CENTER" prefHeight="351.0" prefWidth="528.0" VBox.vgrow="ALWAYS">
                <children>
@@ -45,7 +46,7 @@
                                     </Label>
                                  </children>
                               </TextFlow>
-                              <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="146.0" style="-fx-background-color: #626ae7;" text="import" textAlignment="CENTER" textFill="#e6e6e6">
+                              <Button fx:id="importButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="146.0" style="-fx-background-color: #626ae7;" text="import" textAlignment="CENTER" textFill="#e6e6e6">
                                  <HBox.margin>
                                     <Insets right="4.0" top="10.0" />
                                  </HBox.margin>
@@ -67,7 +68,7 @@
                               <Insets left="8.0" />
                            </padding>
                         </HBox>
-                        <TextArea prefHeight="109.0" prefWidth="508.0" promptText="input text" wrapText="true">
+                        <TextArea fx:id="inputText" prefHeight="109.0" prefWidth="508.0" promptText="input text" wrapText="true">
                            <VBox.margin>
                               <Insets bottom="8.0" left="12.0" right="8.0" top="8.0" />
                            </VBox.margin>
@@ -81,7 +82,7 @@
                      </children></VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="360.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #626ae7;" text="Analyze" textFill="#e6e6e6">
+                        <Button fx:id="analyzeButton" mnemonicParsing="false" style="-fx-background-color: #626ae7;" text="Analyze" textFill="#e6e6e6">
                            <padding>
                               <Insets bottom="8.0" left="18.0" right="28.0" top="8.0" />
                            </padding>
@@ -130,7 +131,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label text="812">
+                        <Label fx:id="wordCount" text="812">
                            <HBox.margin>
                               <Insets left="2.0" />
                            </HBox.margin>
@@ -143,7 +144,7 @@
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </padding>
                   </HBox>
-                  <TextArea prefHeight="145.0" prefWidth="268.0" promptText="This area will display the processed text with modifications applied.">
+                  <TextArea fx:id="processedTextArea" editable="false" prefHeight="145.0" prefWidth="268.0" promptText="This area will display the processed text with modifications applied." wrapText="true">
                      <VBox.margin>
                         <Insets bottom="4.0" left="12.0" right="4.0" top="4.0" />
                      </VBox.margin>
@@ -152,9 +153,27 @@
                      </font>
                   </TextArea>
                </children></VBox>
+            <Button fx:id="exportButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="137.0" style="-fx-background-color: #626ae7;" text="Export" textFill="#e6e6e6">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="8.0" left="18.0" right="28.0" top="8.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@mycollection/upload%20(1).png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
-      <VBox alignment="TOP_CENTER" layoutX="729.0" layoutY="208.0" prefHeight="657.0" prefWidth="541.0" AnchorPane.bottomAnchor="81.0" AnchorPane.leftAnchor="699.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="128.0">
+      <VBox alignment="TOP_CENTER" layoutX="699.0" layoutY="128.0" prefHeight="737.0" prefWidth="521.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="669.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="48.0">
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="104.0" prefWidth="236.0" VBox.vgrow="NEVER">
                <children>
@@ -165,14 +184,20 @@
                   </Label>
                   <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="236.0">
                      <children>
-                        <TextField prefHeight="42.0" prefWidth="285.0" promptText="Find" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
+                        <TextField fx:id="textFind" prefHeight="42.0" prefWidth="285.0" promptText="Find" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
                            <font>
                               <Font size="18.0" />
                            </font></TextField>
-                        <ComboBox prefHeight="35.0" prefWidth="120.0" promptText="Quantity" style="-fx-background-color: #ffff; -fx-background-radius: 1;" visibleRowCount="18">
+                        <ComboBox fx:id="replaceDropdown" prefHeight="35.0" prefWidth="120.0" promptText="Quantity" style="-fx-background-color: #ffff; -fx-background-radius: 1;" visibleRowCount="18">
                            <HBox.margin>
                               <Insets left="4.0" />
                            </HBox.margin>
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="Replace All" />
+                                 <String fx:value="Replace First" />
+                              </FXCollections>
+                           </items>
                         </ComboBox>
                      </children>
                      <padding>
@@ -181,11 +206,11 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="37.0" prefHeight="37.0" prefWidth="236.0">
                      <children>
-                        <TextField prefHeight="42.0" prefWidth="287.0" promptText="Replace with" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
+                        <TextField fx:id="textReplace" prefHeight="42.0" prefWidth="287.0" promptText="Replace with" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
                            <font>
                               <Font size="18.0" />
                            </font></TextField>
-                        <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="137.0" style="-fx-background-color: #626ae7;" text="Replace" textFill="#e6e6e6">
+                        <Button fx:id="textReplaceButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="137.0" style="-fx-background-color: #626ae7;" text="Replace" textFill="#e6e6e6">
                            <padding>
                               <Insets bottom="8.0" left="18.0" right="28.0" top="8.0" />
                            </padding>
@@ -207,7 +232,7 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" prefHeight="123.0" prefWidth="427.0" style="-fx-background-color: #fffff; -fx-background-radius: 4; -fx-border-color: #efee;" VBox.vgrow="NEVER">
+            <VBox alignment="CENTER_LEFT" prefHeight="123.0" prefWidth="427.0" VBox.vgrow="NEVER">
                <children>
                   <Label text="Search">
                      <font>
@@ -216,11 +241,11 @@
                   </Label>
                   <HBox alignment="CENTER_LEFT" layoutX="11.0" layoutY="39.0" prefHeight="37.0" prefWidth="236.0">
                      <children>
-                        <TextField prefHeight="42.0" prefWidth="296.0" promptText="Search" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
+                        <TextField fx:id="textSearch" prefHeight="42.0" prefWidth="296.0" promptText="Search" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
                            <font>
                               <Font size="18.0" />
                            </font></TextField>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #626ae7;" text="Search" textFill="#e6e6e6">
+                        <Button fx:id="textSearchButton" mnemonicParsing="false" style="-fx-background-color: #626ae7;" text="Search" textFill="#e6e6e6">
                            <padding>
                               <Insets bottom="8.0" left="28.0" right="28.0" top="8.0" />
                            </padding>
@@ -253,11 +278,11 @@
                   </Label>
                   <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="236.0">
                      <children>
-                        <TextField prefHeight="42.0" prefWidth="303.0" promptText="input pattern" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
+                        <TextField fx:id="regexInput" prefHeight="42.0" prefWidth="303.0" promptText="input pattern" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
                            <font>
                               <Font size="18.0" />
                            </font></TextField>
-                        <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="130.0" style="-fx-background-color: #626ae7;" text="Search" textFill="#e6e6e6">
+                        <Button fx:id="regexSearchButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="130.0" style="-fx-background-color: #626ae7;" text="Search" textFill="#e6e6e6">
                            <padding>
                               <Insets bottom="8.0" left="16.0" right="28.0" top="8.0" />
                            </padding>
@@ -277,11 +302,75 @@
                         </Button>
                      </children>
                   </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="37.0" prefHeight="37.0" prefWidth="236.0">
+                     <children>
+                        <TextField fx:id="regexReplace" prefHeight="42.0" prefWidth="287.0" promptText="Replace with" style="-fx-background-color: #ffff; -fx-background-radius: 4; -fx-border-color: #efee;">
+                           <font>
+                              <Font size="18.0" />
+                           </font></TextField>
+                        <Button fx:id="regexReplaceButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="137.0" style="-fx-background-color: #626ae7;" text="Replace" textFill="#e6e6e6">
+                           <padding>
+                              <Insets bottom="8.0" left="18.0" right="28.0" top="8.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets left="8.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@mycollection/change.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="18.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Button fx:id="bookMarkButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="172.0" style="-fx-background-color: #626ae7;" text="BookMark" textFill="#e6e6e6">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="8.0" left="18.0" right="28.0" top="8.0" />
+                     </padding>
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@mycollection/bookmark.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <VBox.margin>
+                        <Insets left="80.0" top="80.0" />
+                     </VBox.margin>
+                  </Button>
+
                </children></VBox>
          </children>
          <padding>
             <Insets bottom="8.0" left="20.0" right="8.0" top="8.0" />
          </padding></VBox>
+      <VBox alignment="TOP_CENTER" layoutX="1214.0" layoutY="152.0" prefHeight="604.0" prefWidth="407.0">
+         <children>
+            <Label style="-fx-background-color: #626ae7;" text="BookMarks" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+               <padding>
+                  <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+               </VBox.margin>
+            </Label>
+            <ListView fx:id="bookmarkField" onMouseClicked="#handleBookmarkClick" prefHeight="556.0" prefWidth="407.0" />
+         </children>
+      </VBox>
    </children>
    <padding>
       <Insets bottom="40.0" left="30.0" top="80.0" />
