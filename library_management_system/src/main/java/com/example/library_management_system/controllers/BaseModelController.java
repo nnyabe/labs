@@ -15,21 +15,9 @@ import java.util.List;
  */
 public abstract class BaseModelController<T> {
 
-    /**
-     * Abstract method that subclasses should implement to convert a ResultSet row to a model object.
-     *
-     * @param resultSet the ResultSet from which the model object will be created
-     * @return the model object corresponding to the current row in the ResultSet
-     * @throws SQLException if there is an error accessing the ResultSet
-     */
     protected abstract T mapRowToModel(ResultSet resultSet) throws SQLException;
 
-    /**
-     * Retrieves all records from the corresponding table in the database.
-     *
-     * @return a list of all model objects from the table
-     * @throws SQLException if there is an error accessing the database
-     */
+
     public List<T> getAll() throws SQLException {
         List<T> results = new ArrayList<>();
         String query = "SELECT * FROM " + getTableName();
@@ -50,13 +38,6 @@ public abstract class BaseModelController<T> {
         return results;
     }
 
-    /**
-     * Retrieves a record by its ID from the corresponding table in the database.
-     *
-     * @param id the ID of the record to retrieve
-     * @return the model object corresponding to the record, or null if not found
-     * @throws SQLException if there is an error accessing the database
-     */
     public T getById(int id) throws SQLException {
         String query = "SELECT * FROM " + getTableName() + " WHERE id = ?";
         T model = null;
@@ -77,13 +58,6 @@ public abstract class BaseModelController<T> {
         return model;
     }
 
-    /**
-     * Deletes a record by its ID from the corresponding table in the database.
-     *
-     * @param id the ID of the record to delete
-     * @return true if the record was successfully deleted, false otherwise
-     * @throws SQLException if there is an error accessing the database
-     */
     public boolean deleteById(int id) throws SQLException {
         String query = "DELETE FROM " + getTableName() + " WHERE id = ?";
         int rowsAffected = 0;
@@ -101,13 +75,6 @@ public abstract class BaseModelController<T> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Updates a record by its ID in the corresponding table in the database.
-     *
-     * @param model the model object containing the updated data
-     * @return true if the record was successfully updated, false otherwise
-     * @throws SQLException if there is an error accessing the database
-     */
     public boolean updateById(T model) throws SQLException {
         String query = getUpdateQuery();
         int rowsAffected = 0;
@@ -123,14 +90,6 @@ public abstract class BaseModelController<T> {
 
         return rowsAffected > 0;
     }
-
-    /**
-     * Creates a new record in the corresponding table in the database.
-     *
-     * @param model the model object containing the data to be inserted
-     * @return true if the record was successfully created, false otherwise
-     * @throws SQLException if there is an error accessing the database
-     */
     public boolean createOne(T model) throws SQLException {
         String query = getCreateQuery();
         int rowAffected;
@@ -146,49 +105,17 @@ public abstract class BaseModelController<T> {
         return rowAffected > 0;
     }
 
-    /**
-     * Method to get the table name.
-     * This should be implemented in the subclass to provide the appropriate table name.
-     *
-     * @return the name of the table
-     */
     protected abstract String getTableName();
 
-    /**
-     * Method to get the SQL query for updating records.
-     * This should be implemented in the subclass to provide the appropriate update query.
-     *
-     * @return the SQL update query string
-     */
     protected abstract String getUpdateQuery();
 
-    /**
-     * Method to get the SQL query for creating new records.
-     * This should be implemented in the subclass to provide the appropriate create query.
-     *
-     * @return the SQL create query string
-     */
     protected abstract String getCreateQuery();
 
-    /**
-     * Method to set update parameters for the PreparedStatement.
-     * This should be implemented in the subclass to set the appropriate parameters for updating a record.
-     *
-     * @param preparedStatement the PreparedStatement to set the parameters on
-     * @param model the model object containing the data to set
-     * @throws SQLException if there is an error setting the parameters
-     */
+
     protected abstract void setUpdateParameters(PreparedStatement preparedStatement, T model)
             throws SQLException;
 
-    /**
-     * Method to set create parameters for the PreparedStatement.
-     * This should be implemented in the subclass to set the appropriate parameters for creating a record.
-     *
-     * @param preparedStatement the PreparedStatement to set the parameters on
-     * @param model the model object containing the data to set
-     * @throws SQLException if there is an error setting the parameters
-     */
+
     protected abstract void setCreateParameters(PreparedStatement preparedStatement, T model)
             throws SQLException;
 }

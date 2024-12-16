@@ -50,7 +50,7 @@ public class AdminController extends BaseModelController<AdminModel> {
      */
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE admins SET  username = ?, email = ?, role = ? , password = ?" +
+        return "UPDATE admins SET  username = ?, email = ?, role = ? , password = ? " +
                 "WHERE id = ?";
     }
 

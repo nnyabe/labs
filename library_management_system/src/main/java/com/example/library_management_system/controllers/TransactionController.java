@@ -17,13 +17,7 @@ import java.util.List;
  */
 public class TransactionController extends BaseModelController<TransactionModel> {
 
-    /**
-     * Maps a ResultSet row to a TransactionModel object.
-     *
-     * @param resultSet the ResultSet containing the data to be mapped
-     * @return a TransactionModel object representing the row
-     * @throws SQLException if there is an error accessing the ResultSet
-     */
+
     @Override
     protected TransactionModel mapRowToModel(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
@@ -39,21 +33,13 @@ public class TransactionController extends BaseModelController<TransactionModel>
         return new TransactionModel(id, orderDate, approveDate, returnDate, status, approvedBy, orderedBy, resourceId, resourceType, transactionType);
     }
 
-    /**
-     * Returns the name of the table used for transaction records in the database.
-     *
-     * @return the name of the table ("transactions")
-     */
+
     @Override
     protected String getTableName() {
         return "transactions";
     }
 
-    /**
-     * Returns the SQL query for updating a transaction record.
-     *
-     * @return the SQL update query string
-     */
+
     @Override
     protected String getUpdateQuery() {
         return "UPDATE transactions SET  approved_date = ?, return_date = ?, status = ? " +
@@ -61,11 +47,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
                 "WHERE id = ?";
     }
 
-    /**
-     * Returns the SQL query for creating a new transaction record.
-     *
-     * @return the SQL insert query string
-     */
+
     @Override
     protected String getCreateQuery() {
         return "INSERT INTO transactions (approved_date, return_date, status, " +
@@ -73,13 +55,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
                 " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
     }
 
-    /**
-     * Sets the parameters for the update query in the PreparedStatement.
-     *
-     * @param preparedStatement the PreparedStatement to set parameters on
-     * @param transactions the TransactionModel object containing the updated data
-     * @throws SQLException if there is an error setting the parameters
-     */
+
     @Override
     protected void setUpdateParameters(PreparedStatement preparedStatement, TransactionModel transactions)
             throws SQLException {
@@ -92,13 +68,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
         preparedStatement.setInt(7, transactions.getId());
     }
 
-    /**
-     * Sets the parameters for the create query in the PreparedStatement.
-     *
-     * @param preparedStatement the PreparedStatement to set parameters on
-     * @param transactions the TransactionModel object containing the data to be inserted
-     * @throws SQLException if there is an error setting the parameters
-     */
+
     @Override
     protected void setCreateParameters(PreparedStatement preparedStatement, TransactionModel transactions)
             throws SQLException {
@@ -112,72 +82,36 @@ public class TransactionController extends BaseModelController<TransactionModel>
         preparedStatement.setString(8, transactions.getTransactionType().toString());
     }
 
-    /**
-     * Creates a new transaction in the database.
-     *
-     * @param transaction the TransactionModel object containing the data to be inserted
-     * @return true if the transaction was successfully created, false otherwise
-     * @throws SQLException if there is an error accessing the database
-     */
+
     @Override
     public boolean createOne(TransactionModel transaction) throws SQLException {
         return super.createOne(transaction);
     }
 
-    /**
-     * Retrieves all transactions from the database.
-     *
-     * @return a list of all TransactionModel objects
-     * @throws SQLException if there is an error accessing the database
-     */
+
     @Override
     public List<TransactionModel> getAll() throws SQLException {
         return super.getAll();
     }
 
-    /**
-     * Retrieves a transaction by its ID from the database.
-     *
-     * @param id the ID of the transaction to retrieve
-     * @return the TransactionModel object corresponding to the ID, or null if not found
-     * @throws SQLException if there is an error accessing the database
-     */
+
     @Override
     public TransactionModel getById(int id) throws SQLException {
         return super.getById(id);
     }
 
-    /**
-     * Deletes a transaction by its ID from the database.
-     *
-     * @param id the ID of the transaction to delete
-     * @return true if the transaction was successfully deleted, false otherwise
-     * @throws SQLException if there is an error accessing the database
-     */
+
     @Override
     public boolean deleteById(int id) throws SQLException {
         return super.deleteById(id);
     }
 
-    /**
-     * Updates a transaction in the database by its ID.
-     *
-     * @param transaction the TransactionModel object containing the updated data
-     * @return true if the transaction was successfully updated, false otherwise
-     * @throws SQLException if there is an error accessing the database
-     */
     @Override
     public boolean updateById(TransactionModel transaction) throws SQLException {
         return super.updateById(transaction);
     }
 
-    /**
-     * Retrieves all transactions associated with a specific user.
-     *
-     * @param username the username of the patron to retrieve transactions for
-     * @return a list of TransactionModel objects associated with the user
-     * @throws SQLException if there is an error accessing the database
-     */
+
     public List<TransactionModel> getUserTransactions(String username) throws SQLException {
         String query = """
         SELECT t.*
@@ -203,14 +137,6 @@ public class TransactionController extends BaseModelController<TransactionModel>
         return transactions;
     }
 
-    /**
-     * Approves a transaction by updating its status and related resource information.
-     *
-     * @param transactionId the ID of the transaction to approve
-     * @param librarianName the name of the librarian approving the transaction
-     * @throws SQLException if there is an error accessing the database
-     * @throws MySQLConnectionException if there is an error establishing a database connection
-     */
     public void approveTransaction(int transactionId, String librarianName) throws SQLException, MySQLConnectionException {
         String getResourceInfo = "SELECT resource_id, resource_type FROM transactions WHERE id = ?";
         String resourceType = "";
@@ -253,13 +179,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
         }
     }
 
-    /**
-     * Returns a resource associated with a transaction.
-     *
-     * @param transactionId the ID of the transaction to return
-     * @throws SQLException if there is an error accessing the database
-     * @throws MySQLConnectionException if there is an error establishing a database connection
-     */
+
     public void returnResource(int transactionId) throws SQLException, MySQLConnectionException {
         String getResourceInfo = "SELECT resource_id, resource_type FROM transactions WHERE id = ? AND status = 'APPROVED'";
         String resourceType = "";
@@ -301,14 +221,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
         }
     }
 
-    /**
-     * Creates a borrow request for a resource.
-     *
-     * @param orderedBy the username of the patron ordering the resource
-     * @param resourceId the ID of the resource to borrow
-     * @param resourceType the type of resource being borrowed (e.g., "BOOK" or "MAGAZINE")
-     * @throws SQLException if there is an error accessing the database
-     */
+
     public void borrowResource(String orderedBy, int resourceId, String resourceType) throws SQLException {
         String query = "INSERT INTO transactions (ordered_by, resource_id, resource_type, transaction_type, status) " +
                 "VALUES (?, ?, ?, 'BORROW', 'PENDING')";
@@ -321,14 +234,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
                 "Borrow Request Failed", "An error occurred while processing the borrow request.");
     }
 
-    /**
-     * Creates a reservation request for a resource.
-     *
-     * @param orderedBy the username of the patron reserving the resource
-     * @param resourceId the ID of the resource to reserve
-     * @param resourceType the type of resource being reserved (e.g., "BOOK" or "MAGAZINE")
-     * @throws SQLException if there is an error accessing the database
-     */
+
     public void reserveResource(String orderedBy, int resourceId, String resourceType) throws SQLException {
         String query = "INSERT INTO transactions (ordered_by, resource_id, resource_type, transaction_type, status) " +
                 "VALUES (?, ?, ?, 'RESERVATION', 'PENDING')";
@@ -341,17 +247,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
                 "Reservation Failed", "An error occurred while reserving the resource.");
     }
 
-    /**
-     * Executes an update query with the provided parameters and shows alerts based on the result.
-     *
-     * @param query the SQL query to execute
-     * @param parameterSetter a lambda to set parameters on the PreparedStatement
-     * @param successTitle the title for a success alert
-     * @param successMessage the message for a success alert
-     * @param failureTitle the title for a failure alert
-     * @param failureMessage the message for a failure alert
-     * @throws SQLException if there is an error executing the query
-     */
+
     private void executeUpdate(String query, SQLConsumer<PreparedStatement> parameterSetter,
                                String successTitle, String successMessage,
                                String failureTitle, String failureMessage) throws SQLException {
@@ -372,13 +268,6 @@ public class TransactionController extends BaseModelController<TransactionModel>
         }
     }
 
-    /**
-     * Displays an alert with the given type, title, and content.
-     *
-     * @param alertType the type of the alert
-     * @param title the title of the alert
-     * @param content the content of the alert
-     */
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -386,9 +275,7 @@ public class TransactionController extends BaseModelController<TransactionModel>
         alert.showAndWait();
     }
 
-    /**
-     * Functional interface for handling SQL-related operations on PreparedStatements.
-     */
+
     @FunctionalInterface
     interface SQLConsumer<T> {
         void accept(T t) throws SQLException;
