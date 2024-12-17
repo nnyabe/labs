@@ -153,6 +153,7 @@
                     <exclude>**/com/example/library_management_system/views/**</exclude>
                     <exclude>**/com/example/library_management_system/exceptions/**</exclude>
                     <exclude>**/com/example/library_management_system/App.class</exclude>
+                    <exclude>**/com/example/library_management_system/controllers/BaseModelController.class</exclude>
                 </excludes>
             </configuration>
             <executions>

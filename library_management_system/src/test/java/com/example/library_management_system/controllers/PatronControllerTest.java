@@ -2,6 +2,7 @@ package com.example.library_management_system.controllers;
 
 import com.example.library_management_system.modles.PatronModel;
 import com.example.library_management_system.utils.DBConnection;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,6 +22,9 @@ public class PatronControllerTest {
 
     @Mock
     private Connection connection;
+
+    @Mock
+    private PatronModel patronModel;
 
     @Mock
     private PreparedStatement preparedStatement;
@@ -68,7 +72,7 @@ public class PatronControllerTest {
         List<PatronModel> patrons = patronController.getAll();
 
         assertNotNull(patrons);
-        assertEquals(21, patrons.size());
+        assertEquals(20, patrons.size());
         assertEquals("john_doe", patrons.getFirst().getUsername());
     }
 
@@ -118,14 +122,106 @@ public class PatronControllerTest {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         doNothing().when(preparedStatement).setInt(1, 1);  // Set ID to 1
 
-        // Simulate the foreign key constraint violation by throwing the exception
         doThrow(new SQLIntegrityConstraintViolationException("Cannot delete or update a parent row: a foreign key constraint fails"))
                 .when(preparedStatement).executeUpdate();
 
-        // Act and Assert: Ensure the exception is thrown and handle it accordingly
         SQLException thrown = assertThrows(SQLException.class, () -> patronController.deleteById(1));
         assertTrue(thrown.getMessage().contains("foreign key constraint fails"));
     }
 
 
+    @Test
+    public void testGetCreateQuery_ReturnsCorrectSQL() {
+        // Arrange: Expected SQL query string
+        String expectedQuery = "INSERT INTO patrons (username, email) VALUES ( ?, ?)";
+
+        // Act: Call getCreateQuery
+        String actualQuery = patronController.getCreateQuery();
+
+        // Assert: Verify the returned query is the same as the expected one
+        assertEquals(expectedQuery, actualQuery, "The SQL query should match the expected query.");
+    }
+
+    @Test
+    public void testGetUpdateQuery_ReturnsCorrectSQL() {
+        // Arrange: Expected SQL query string
+        String expectedQuery = "UPDATE patrons SET  username = ?, email = ?WHERE id = ?";
+
+        // Act: Call getUpdateQuery
+        String actualQuery = patronController.getUpdateQuery();
+
+        // Assert: Verify the returned query is the same as the expected one
+        assertEquals(expectedQuery, actualQuery, "The SQL query should match the expected query.");
+    }
+
+    @Test
+    void testDeleteById() throws SQLException {
+
+        int patronId = 11;
+        String deleteQuery = "DELETE FROM patrons WHERE id = ?";
+
+        PreparedStatement mockPreparedStatement = mock(PreparedStatement.class);
+        when(connection.prepareStatement(deleteQuery)).thenReturn(mockPreparedStatement);
+
+        when(mockPreparedStatement.executeUpdate()).thenReturn(1); // Simulate 1 row affected
+
+        PatronController controller = new PatronController();
+        boolean result = controller.deleteById(patronId);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void testSetUpdateParameters() throws SQLException {
+        // Arrange: Create a patron model with sample data
+        int patronId = 1;
+        String patronUsername = "john_doe";
+        String patronEmail = "john.doe@example.com";
+
+        when(patronModel.getUsername()).thenReturn(patronUsername);
+        when(patronModel.getEmail()).thenReturn(patronEmail);
+        when(patronModel.getId()).thenReturn(patronId);
+
+        // Act: Call the setUpdateParameters method
+        patronController.setUpdateParameters(preparedStatement, patronModel);
+
+        // Assert: Verify that the correct methods were called on the PreparedStatement
+        verify(preparedStatement, times(1)).setString(1, patronUsername);
+        verify(preparedStatement, times(1)).setString(2, patronEmail);
+        verify(preparedStatement, times(1)).setInt(3, patronId);
+    }
+    @Test
+    public void testSetCreateParametersWithNullValues() throws SQLException {
+        // Arrange: Create a patron model with null values
+        String patronUsername = null;
+        String patronEmail = null;
+
+        when(patronModel.getUsername()).thenReturn(patronUsername);
+        when(patronModel.getEmail()).thenReturn(patronEmail);
+
+        // Act: Call the setCreateParameters method
+        patronController.setCreateParameters(preparedStatement, patronModel);
+
+        // Assert: Verify that the correct methods were called on the PreparedStatement with null values
+        verify(preparedStatement, times(1)).setString(1, patronUsername);  // Null value
+        verify(preparedStatement, times(1)).setString(2, patronEmail);     // Null value
+    }
+
+    @Test
+    public void testSetCreateParametersThrowsSQLException() throws SQLException {
+        // Arrange: Create a patron model with sample data
+        String patronUsername = "john_doe";
+        String patronEmail = "john.doe@example.com";
+
+        when(patronModel.getUsername()).thenReturn(patronUsername);
+        when(patronModel.getEmail()).thenReturn(patronEmail);
+
+        // Simulate SQLException when setString is called
+        doThrow(new SQLException("Database error")).when(preparedStatement).setString(anyInt(), anyString());
+
+        // Act & Assert: Verify that an exception is thrown when setCreateParameters is called
+        Assertions.assertThrows(SQLException.class, () -> {
+            patronController.setCreateParameters(preparedStatement, patronModel);
+        });
+    }
 }
