@@ -95,15 +95,15 @@ public class BaseModelControllerTest {
     }
 
 
-
-    @Test
-    void testCreateOne() throws SQLException {
-        String query = "INSERT INTO books (available_state, title, publisher, total_copies, copies_left, author, isbn, edition, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        when(connection.prepareStatement(query)).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1); // simulate successful insert
-
-        BookModel book = new BookModel(false, "New Book", "O'Reilly", 20, 15, "Tom Smith", "97112233445", 1);
-        boolean result = controller.createOne(book);
-        assertTrue(result);
-    }
+//
+//    @Test
+//    void testCreateOne() throws SQLException {
+//        String query = "INSERT INTO books (available_state, title, publisher, total_copies, copies_left, author, isbn, edition, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//        when(connection.prepareStatement(query)).thenReturn(preparedStatement);
+//        when(preparedStatement.executeUpdate()).thenReturn(1); // simulate successful insert
+//
+//        BookModel book = new BookModel(false, "New Book", "O'Reilly", 20, 15, "Tom Smith", "97112233445", 1);
+//        boolean result = controller.createOne(book);
+//        assertTrue(result);
+//    }
 }

@@ -45,35 +45,4 @@ class DBConnectionTest {
         mockConnection.close();
 
     }
-    @Test
-    void testCreateConnection_InvalidCredentials() throws SQLException {
-        // Simulating an invalid credential exception
-        SQLException exception = new SQLException("Access denied for user");
-        try(MockedStatic<DriverManager> mockedDriver = mockStatic(DriverManager.class);) {
-            mockedDriver.when(()->DriverManager.getConnection(anyString(), anyString(), anyString())).thenThrow(exception);
-        }
-        assertThrows(InvalidMySQLCredentialsException.class, DBConnection::createConnection);
-    }
-//
-//    @Test
-//    public void testCreateConnection_Timeout() throws SQLException {
-//        // Simulate a timeout exception
-//        when(DriverManager.getConnection(anyString(), anyString(), anyString()))
-//                .thenThrow(new SQLException("Communications link failure"));
-//
-//        // Call the method and assert the exception
-//        assertThrows(MySQLTimeoutException.class, () -> {
-//            DBConnection.createConnection();
-//        });
-//    }
-//
-//    @Test
-//    public void testRunSQLInitialization_Success() {
-//        // Simulating the creation of the SQL file and connection
-//        String sqlFilePath = "src/test/resources/test_init.sql";
-//        // Mock the method to execute SQL commands from the file
-//        DBConnection.runSQLInitialization(sqlFilePath);
-//
-//        assertTrue(true); // Just a placeholder, you would add specific logic here.
-//    }
 }

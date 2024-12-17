@@ -77,6 +77,7 @@ public class PatronController extends BaseModelController<PatronModel> {
 
 
     @Override
+
     public boolean deleteById(int id) throws SQLException {
         return super.deleteById(id);
     }

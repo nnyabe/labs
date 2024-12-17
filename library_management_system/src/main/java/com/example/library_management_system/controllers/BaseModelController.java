@@ -90,6 +90,7 @@ public abstract class BaseModelController<T> {
 
         return rowsAffected > 0;
     }
+
     public boolean createOne(T model) throws SQLException {
         String query = getCreateQuery();
         int rowAffected;
