@@ -4,13 +4,8 @@ public class UserSession {
     private static UserSession instance;  // Singleton instance
     private String username;  // Username for the current session
 
-    // Default constructor
     public UserSession() {}
 
-    /**
-     * Returns the singleton instance of UserSession.
-     * If the instance doesn't exist, it is created.
-     */
     public static UserSession getInstance() {
         if (instance == null) {
             instance = new UserSession();

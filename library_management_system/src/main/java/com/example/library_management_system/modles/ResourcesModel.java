@@ -12,17 +12,11 @@ public abstract class ResourcesModel {
     private Date createdAt;
     private Date updatedAt;
 
-    /**
-     * Constructor without ID, with resource type (used for initialization).
-     */
     public ResourcesModel(boolean availableState, String title, String publisher, int totalCopies,
                           int copiesLeft, String resourceType) {
         this(0, availableState, title, publisher, totalCopies, copiesLeft, new Date(), new Date());
     }
 
-    /**
-     * Full constructor with ID and timestamps.
-     */
     public ResourcesModel(int id, boolean availableState, String title, String publisher, int totalCopies,
                           int copiesLeft, Date createdAt, Date updatedAt) {
         this.id = id;
@@ -34,8 +28,6 @@ public abstract class ResourcesModel {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    // Getters and setters
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -100,9 +92,6 @@ public abstract class ResourcesModel {
         this.copiesLeft = copiesLeft;
     }
 
-    /**
-     * String representation of the resource model.
-     */
     @Override
     public String toString(){
         return "\n{ id = "+ id +

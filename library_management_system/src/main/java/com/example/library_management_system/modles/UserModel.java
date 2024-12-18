@@ -9,12 +9,8 @@ public abstract class UserModel {
     private Date created_at;
     private Date updated_at;
 
-    // Default constructor
     public UserModel() {}
 
-    /**
-     * Constructor to initialize user details.
-     */
     public UserModel(int id, String username,
                      String email, Date created_at,
                      Date updated_at) {
@@ -25,7 +21,6 @@ public abstract class UserModel {
         this.updated_at = updated_at;
     }
 
-    // Getters and setters for the user properties
     public int getId() {
         return id;
     }
